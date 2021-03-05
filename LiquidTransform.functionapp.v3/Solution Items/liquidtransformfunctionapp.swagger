@@ -1,0 +1,49 @@
+swagger: '2.0'
+info:
+  title: Liquid Transform API
+  version: 1.0.0
+host: yourfunctionurl.azurewebsites.net
+basePath: /
+schemes:
+  - https
+  - http
+paths:
+  '/api/liquidtransformer/{LiquidTransformFilename}':
+    post:
+      operationId: '/api/liquidtransformer/{LiquidTransformFilename}/post'
+      consumes:
+      - "application/xml"
+      - "application/json"
+      produces:
+      - "application/xml"
+      - "application/json"
+      - "text/plain"
+      parameters:
+        - in: path
+          name: LiquidTransformFilename
+          required: true
+          type: string
+        - in: body
+          name: Content
+          required: true
+          schema:
+            type: object
+        - in: header
+          name: Accept
+          required: true
+          type: string
+        - in: header
+          name: Content-Type
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success operation
+      security:
+        - apikeyQuery: []
+definitions: {}
+securityDefinitions:
+  apikeyQuery:
+    type: apiKey
+    name: code
+    in: query
