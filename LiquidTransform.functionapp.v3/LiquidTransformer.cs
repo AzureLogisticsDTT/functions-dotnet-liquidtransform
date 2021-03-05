@@ -10,7 +10,7 @@ using System.Text;
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace LiquidTransform.functionapp.v2
+namespace LiquidTransform.functionapp.v3
 {
     public static class LiquidTransformer
     {
@@ -30,9 +30,14 @@ namespace LiquidTransform.functionapp.v2
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
+            //HttpClient client = new HttpClient();
+            //var responseString = await client.GetStringAsync("https://azurelogisticsdtt.blob.core.windows.net/liquid-transforms/teste.liquid");
+            //log.LogInformation(responseString);
+
+
             if (inputBlob == null)
             {
-                log.LogError("inputBlog null");
+                log.LogError("inputBlob null");
                 return req.CreateErrorResponse(HttpStatusCode.NotFound, "Liquid transform not found");
             }
 
@@ -50,6 +55,8 @@ namespace LiquidTransform.functionapp.v2
 
             Hash inputHash;
 
+            log.LogInformation("Parsing Request...\n");
+
             try
             {
                 inputHash = await contentReader.ParseRequestAsync(req.Content);
@@ -60,24 +67,33 @@ namespace LiquidTransform.functionapp.v2
                 log.LogError(ex.Message, ex);
                 return req.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error parsing request body", ex);
             }
+            log.LogInformation("Done!\n");
+
 
             // Register the Liquid custom filter extensions
             Template.RegisterFilter(typeof(CustomFilters));
 
             // Execute the Liquid transform
             Template template;
+            log.LogInformation("Parsing Template.....");
 
             try
             {
                 template = Template.Parse(liquidTransform);
+                //template = Template.Parse(responseString);
             }
             catch (Exception ex)
             {
                 log.LogError(ex.Message, ex);
                 return req.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error parsing Liquid template", ex);
             }
+            log.LogInformation("Done!\n");
+
 
             string output = string.Empty;
+
+            log.LogInformation("Rendering Output...\n");
+
 
             try
             {
@@ -88,9 +104,13 @@ namespace LiquidTransform.functionapp.v2
                 log.LogError(ex.Message, ex);
                 return req.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error rendering Liquid template", ex);
             }
+            log.LogInformation("Done");
+
 
             if (template.Errors != null && template.Errors.Count > 0)
             {
+                log.LogInformation("but it has errors...\n");
+
                 if (template.Errors[0].InnerException != null)
                 {
                     return req.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error rendering Liquid template: {template.Errors[0].Message}", template.Errors[0].InnerException);
@@ -100,11 +120,11 @@ namespace LiquidTransform.functionapp.v2
                     return req.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error rendering Liquid template: {template.Errors[0].Message}");
                 }
             }
-
+            log.LogInformation("Writing Response!!\n");
             try
             {
                 var content = contentWriter.CreateResponse(output);
-
+                log.LogInformation("Request Complete!\n");
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = content
@@ -112,6 +132,7 @@ namespace LiquidTransform.functionapp.v2
             }
             catch (Exception ex)
             {
+                log.LogInformation("Failed to Write Response.\n");
                 // Just log the error, and return the Liquid output without parsing
                 log.LogError(ex.Message, ex);
 

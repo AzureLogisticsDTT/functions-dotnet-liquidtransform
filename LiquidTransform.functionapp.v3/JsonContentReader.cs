@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using DotLiquid;
+using Newtonsoft.Json;
 
-namespace LiquidTransform.functionapp.v1
+namespace LiquidTransform.functionapp.v3
 {
     public class JsonContentReader : IContentReader
     {
@@ -21,10 +21,8 @@ namespace LiquidTransform.functionapp.v1
             string requestBody = await content.ReadAsStringAsync();
 
             var transformInput = new Dictionary<string, object>();
-            var serializer = new JavaScriptSerializer();
-            // Let's not shy away from some big JSON files
-            serializer.MaxJsonLength = Int32.MaxValue;
-            dynamic requestJson = serializer.Deserialize(requestBody, typeof(object));
+
+            var requestJson = JsonConvert.DeserializeObject<IDictionary<string, object>>(requestBody, new DictionaryConverter());
 
             // Wrap the JSON input in another content node to provide compatibility with Logic Apps Liquid transformations
             transformInput.Add("content", requestJson);

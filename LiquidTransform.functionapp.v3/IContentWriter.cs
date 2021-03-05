@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LiquidTransform.functionapp.v1
+namespace LiquidTransform.functionapp.v3
 {
     public interface IContentWriter
     {

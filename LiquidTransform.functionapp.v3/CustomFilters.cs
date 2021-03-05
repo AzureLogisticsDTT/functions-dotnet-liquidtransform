@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LiquidTransform.functionapp.v2
+namespace LiquidTransform.functionapp.v3
 {
     public static class CustomFilters
     {

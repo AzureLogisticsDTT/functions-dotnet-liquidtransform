@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DotLiquid;
 
-namespace LiquidTransform.functionapp.v2
+namespace LiquidTransform.functionapp.v3
 {
     public class CsvContentReader : IContentReader
     {
