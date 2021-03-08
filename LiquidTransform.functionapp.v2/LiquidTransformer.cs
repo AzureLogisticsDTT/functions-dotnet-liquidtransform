@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -98,6 +99,8 @@ namespace LiquidTransform.functionapp.v3
             try
             {
                 output = template.Render(inputHash);
+                dynamic parsedJson = JsonConvert.DeserializeObject(output);
+                output = JsonConvert.SerializeObject(parsedJson,Formatting.Indented);
             }
             catch (Exception ex)
             {
