@@ -43,9 +43,16 @@ namespace LiquidTransform.functionapp.v3
             return JsonConvert.SerializeObject(input, jsonSettings);
         }
 
+        public static string MultDHLQuantities(Context context,dynamic input,string quantity,string path)
+        {
+            var final = JsonConvert.SerializeObject(input, jsonSettings);
+            return final;
+        }
+
         public static string Json_nohtml(Context context, dynamic input)
         {
             return JsonConvert.SerializeObject(input, jsonNoHtmlSettings);
         }
+
     }
 }

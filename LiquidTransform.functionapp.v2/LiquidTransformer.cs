@@ -109,7 +109,7 @@ namespace LiquidTransform.functionapp.v3
             }
             log.LogInformation("Done");
 
-
+/*
             if (template.Errors != null && template.Errors.Count > 0)
             {
                 log.LogInformation("but it has errors...\n");
@@ -123,6 +123,7 @@ namespace LiquidTransform.functionapp.v3
                     return req.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error rendering Liquid template: {template.Errors[0].Message}");
                 }
             }
+*/
             log.LogInformation("Writing Response!!\n");
             try
             {

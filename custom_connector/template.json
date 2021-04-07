@@ -1,0 +1,105 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"customApis_Liquid_Transform_name": {
+			"defaultValue": "Liquid-Transform",
+			"type": "String"
+		}
+	},
+	"variables": {},
+	"resources": [
+		{
+			"type": "Microsoft.Web/customApis",
+			"apiVersion": "2016-06-01",
+			"name": "[parameters('customApis_Liquid_Transform_name')]",
+			"location": "westeurope",
+			"properties": {
+				"brandColor": "#000000",
+				"description": "Liquid Transform input JSON",
+				"displayName": "[parameters('customApis_Liquid_Transform_name')]",
+				"iconUri": "/Content/retail/assets/default-connection-icon.e6bb72160664a5e37b9923c3d9f50ca5.2.svg",
+				"swagger": {
+					"swagger": "2.0",
+					"info": {
+						"title": "Default title",
+						"description": "Liquid Transform input JSON",
+						"version": "1.0"
+					},
+					"host": "func-int-liquidtransform.azurewebsites.net",
+					"basePath": "/api/liquidtransformer/",
+					"schemes": [
+						"https"
+					],
+					"consumes": [],
+					"produces": [],
+					"paths": {
+						"/testcustomfilter.liquid": {},
+						"/{liquidmap}": {
+							"post": {
+								"responses": {
+									"default": {
+										"description": "default",
+										"schema": {}
+									}
+								},
+								"summary": "Transform Input JSON",
+								"description": "Transforms input JSON with the Liquid map specified",
+								"operationId": "transform-liquid",
+								"parameters": [
+									{
+										"name": "liquidmap",
+										"in": "path",
+										"required": true,
+										"type": "string",
+										"x-ms-visibility": "important",
+										"description": "Set Which Liquid Map for the transformation"
+									},
+									{
+										"name": "code",
+										"in": "query",
+										"required": true,
+										"type": "string",
+										"default": "R4vg6jXh9jpaMEjxnO43p0UvW0xL0fqW6Fqjybga9d6ZWUAx4NECJA==",
+										"x-ms-visibility": "internal"
+									},
+									{
+										"name": "Accept",
+										"in": "header",
+										"required": true,
+										"type": "string",
+										"default": "application/json"
+									},
+									{
+										"name": "Content-Type",
+										"in": "header",
+										"required": true,
+										"type": "string",
+										"default": "application/json"
+									},
+									{
+										"name": "body",
+										"in": "body",
+										"required": true,
+										"schema": {
+											"type": "object",
+											"properties": {},
+											"x-ms-visibility": "important"
+										},
+										"x-ms-visibility": "important"
+									}
+								]
+							}
+						}
+					},
+					"definitions": {},
+					"parameters": {},
+					"responses": {},
+					"securityDefinitions": {},
+					"security": [],
+					"tags": []
+				}
+			}
+		}
+	]
+}
