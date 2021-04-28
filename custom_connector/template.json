@@ -18,7 +18,12 @@
 				"brandColor": "#000000",
 				"description": "Liquid Transform input JSON",
 				"displayName": "[parameters('customApis_Liquid_Transform_name')]",
-				"iconUri": "/Content/retail/assets/default-connection-icon.e6bb72160664a5e37b9923c3d9f50ca5.2.svg",
+				"iconUri": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAkFBMVEUAAADi5efi5efi5efi5efAxsvi5efi5efi5efi5edXbX5XbX5XbX5XbX7////////i5eewt721u8G/xcrJztLb3+Gyub/N0dW+xMnW29/K0dhXbX5leYiIl6PU2dxid4dvgZCgq7Vrfo7L0tjM09rS2N7M09ng4+X///9sf46rtr7V2t7q7O7AyM6Wo66BkZ7c1NZZAAAAEHRSTlMAJH6z58EAbvW1Gqfn6wAApKU7ZgAAAwxJREFUeJzt22lT2zAQBuBcJQHaqVugFAwtFGgt23H+/7+rHF9ydKzIeldhRu8HDqNoHyRbzhg0++rIfLFcJUfm08wz9vJn682x1WW++Qrs9c8R5SXAV2AFrFH1JcBTYJ1/zPg3AD+BDbDA1d8DvAQ2wHIKgI/ABjj6+hsBPAQ2ALJ+B4AF1ABQQA6ABPQAQMAAcAs4AE4BC8Al4AE4BEwAu4ALYBWwAWwCPoBFwAgwCzgBRgErwCTgBRgEVIDvvgIqwJUFoAmoANc2wKGACnDzw1NABUhurYCxgAyQ/PQT0AGSW69ZIAQkN9dX8NVICahzd28OG8Am4ANYBIwAs4ATYBSwAkwCXoBBwAzQBdwATcAOOBTwAw4EAQBjQQjASBAEoArCABRBIMAgCAXoBcEAnSAcoBUEBDSCkIC9ICigFoQFSEFgQHIXGpBEwAkCLi4/p0R5ePwFAy6+UJWv81sTaIBLyvpp+ggCyMa/yQMIoK2fphEQAREQAREQAR8IkGVZavhG5EWZlUUutJ+0Xw2fZJSGEwHyrEvuA6iznRJQDP1mhSegbTgJYFt3V4lUVEU3Bg6A/Ng0VMcABRDDyO/nQoCAtuFuIkCuDmfRYEBA3VAZAhRAdlX1h3aNBgbIhuVEgLIZ9Sai6RcGiOkAo0PaMRtg/LKPPQKlej6/5xxQVgIUYGu4CnpUd66ZroJ86AkF2BnWgf4i63SmdUC5H6AA+5W42Al1gatqlDxS16k0AHIl7NL3Kkp9iR8OlekYgL8XaIBUDHej7tfqUaUwA/J0QoAc8qIuWG6VaW3fIYxnq0Uh3g/YM7oa35spAPX5tq0E3JAK0J53JdyQCtCcijnckAogl6S8yI6bg4kAxycCTh9A/KDyCQQQP6p9BgG0D6v/vIAAysf1T88v9zDgINq/veDyGhrwFhjw919QwOubVv8U/2gVAREQAacGwG54BLICAdgtn0CWIAC76RXIAgRgt/26s5mDAOzGZ3fWMxiA3PrtzPmZBwC5+d2RzVqp7wDgtv/bslou5kr52X+IIJb4Jp8lxQAAAABJRU5ErkJggg==",
+				"apiType": "REST",
+				"backendService": {
+					"serviceUrl" : "https://func-int-liquidtransform.azurewebsites.net/api/liquidtransformer/"
+				},
+				"capabilities": [ "gateway"],
 				"swagger": {
 					"swagger": "2.0",
 					"info": {
@@ -35,7 +40,7 @@
 					"produces": [],
 					"paths": {
 						"/testcustomfilter.liquid": {},
-						"/{liquidmap}": {
+						"/{Map}": {
 							"post": {
 								"responses": {
 									"default": {
@@ -48,7 +53,7 @@
 								"operationId": "transform-liquid",
 								"parameters": [
 									{
-										"name": "liquidmap",
+										"name": "Map",
 										"in": "path",
 										"required": true,
 										"type": "string",
@@ -68,6 +73,7 @@
 										"in": "header",
 										"required": true,
 										"type": "string",
+										"description": "Set the Response Body format: Json or text",
 										"default": "application/json"
 									},
 									{
@@ -75,10 +81,11 @@
 										"in": "header",
 										"required": true,
 										"type": "string",
+										"description": "Set the Request Body format: XML or Json or text",										
 										"default": "application/json"
 									},
 									{
-										"name": "body",
+										"name": "Content",
 										"in": "body",
 										"required": true,
 										"schema": {

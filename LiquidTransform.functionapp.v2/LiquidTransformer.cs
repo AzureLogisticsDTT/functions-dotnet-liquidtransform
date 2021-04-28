@@ -10,6 +10,7 @@ using DotLiquid;
 using System.Text;
 using System;
 using Microsoft.Extensions.Logging;
+using System.Xml.Linq;
 
 namespace LiquidTransform.functionapp.v3
 {
@@ -98,9 +99,20 @@ namespace LiquidTransform.functionapp.v3
 
             try
             {
-                output = template.Render(inputHash);
-                dynamic parsedJson = JsonConvert.DeserializeObject(output);
-                output = JsonConvert.SerializeObject(parsedJson,Formatting.Indented);
+                output = template.Render(inputHash);        
+                switch (responseContentType)
+                {
+                    case "application/xml":
+                        var xDoc = XDocument.Parse(output);
+                        output = xDoc.ToString();
+                        break;
+                    case "application/json":
+                        dynamic parsedJson = JsonConvert.DeserializeObject(output);
+                        output = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (Exception ex)
             {
@@ -109,7 +121,7 @@ namespace LiquidTransform.functionapp.v3
             }
             log.LogInformation("Done");
 
-/*
+
             if (template.Errors != null && template.Errors.Count > 0)
             {
                 log.LogInformation("but it has errors...\n");
@@ -120,10 +132,11 @@ namespace LiquidTransform.functionapp.v3
                 }
                 else
                 {
-                    return req.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error rendering Liquid template: {template.Errors[0].Message}");
+                    log.LogInformation($"Warning rendering Liquid template: {template.Errors[0].Message}");
+                    //return req.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error rendering Liquid template: {template.Errors[0].Message}");
                 }
             }
-*/
+
             log.LogInformation("Writing Response!!\n");
             try
             {
