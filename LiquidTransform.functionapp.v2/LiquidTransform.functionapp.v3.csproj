@@ -11,9 +11,12 @@
     <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.9.1" />
     <PackageReference Include="DotLiquid" Version="2.0.395" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.13" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

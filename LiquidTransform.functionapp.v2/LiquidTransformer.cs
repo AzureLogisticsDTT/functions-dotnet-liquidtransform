@@ -11,6 +11,8 @@ using System.Text;
 using System;
 using Microsoft.Extensions.Logging;
 using System.Xml.Linq;
+using Microsoft.WindowsAzure.Storage;
+using System.Configuration;
 
 namespace LiquidTransform.functionapp.v3
 {
@@ -26,17 +28,26 @@ namespace LiquidTransform.functionapp.v3
         /// <returns></returns>
         [FunctionName("LiquidTransformer")]
         public static async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "liquidtransformer/{liquidtransformfilename}")] HttpRequestMessage req,
-            [Blob("liquid-transforms/{liquidtransformfilename}", FileAccess.Read)] Stream inputBlob,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            //HttpClient client = new HttpClient();
-            //var responseString = await client.GetStringAsync("https://azurelogisticsdtt.blob.core.windows.net/liquid-transforms/teste.liquid");
-            //log.LogInformation(responseString);
-
-
+            log.LogInformation("HTTP Trigger has received a request for LiquidTransformer");
+            string filename;
+            string inputBlob;
+            try
+            {
+                filename = req.Headers.GetValues("Filename").First();
+                log.LogInformation(filename);
+                var storageAccount = CloudStorageAccount.Parse(Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
+                var blobClient = storageAccount.CreateCloudBlobClient();
+                var container = blobClient.GetContainerReference("liquid-transforms").GetBlockBlobReference(filename);
+                inputBlob = await container.DownloadTextAsync();
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return req.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
             if (inputBlob == null)
             {
                 log.LogError("inputBlob null");
